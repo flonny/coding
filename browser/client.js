@@ -81,9 +81,8 @@ ok
 **/
 class ResponseParser {
     constructor() {
-        this.WAITCODE = 0
-        this.WAITSTATE = 1
-        this.WAITSPACE = 2
+
+    
     }
 }
 const requset = new Request({
