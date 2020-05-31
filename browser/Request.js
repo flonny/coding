@@ -36,7 +36,7 @@ class Request {
             resolve(parser.response);
           }
           // resolve(data.toString());
-          connection.end();
+          // connection.end();
         });
         connection.on("end", () => {
           console.log("disconnected from server");
