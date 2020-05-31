@@ -27,6 +27,12 @@ const EOFToken = {
 };
 let currentToken = null;
 let currentAttribute = null;
+let stack = [
+  {
+    type: "document",
+    children: [],
+  },
+];
 function isASCIIAlpha(c) {
   return c.match(/^[a-zA-Z]$/);
 }
@@ -34,9 +40,42 @@ function isSpace(c) {
   return c.match(/^[\t\n\f ]$/);
 }
 function emit(token) {
-  if (token.type !== "text") {
-    console.log(token);
+  if (token.type === "text") return;
+  let currentTextNode = null;
+  let top = stack[stack.length - 1];
+  console.log(token.tagName);
+  if (token.type === "startTag") {
+    let element = {
+      type: "element",
+      children: [],
+      attributes: [],
+    };
+    element.tagName = token.tagName;
+    for (let p in token) {
+      if (p !== "type" && p !== "tagName") {
+        element.attributes.push({
+          name: p,
+          value: token[p],
+        });
+      }
+    }
+    top.children.push(element);
+    element.parent = top;
+    if (!token.isSlefClosing) {
+      stack.push(element);
+    }
+    currentTextNode = null;
+  } else if (token.type === "endTag") {
+    if (top.tagName !== token.tagName) {
+      throw new Error("Tag start end don't match");
+    } else {
+      stack.pop();
+    }
+    currentTextNode = null;
   }
+  // if (token.type !== "text") {
+  //   console.log(token);
+  // }
 }
 function data(c) {
   if (c === "<") {
@@ -160,64 +199,64 @@ function beforeAttributeValue(c) {
 }
 //Switch to the attribute value (double-quoted) state.
 function doubleQuotedAttributeValue(c) {
-  if(c === "\"") {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    return afterQuetedAttributeValue
-  }else {
-    currentAttribute.value+=c
-    return doubleQuotedAttributeValue
+  if (c === '"') {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return afterQuetedAttributeValue;
+  } else {
+    currentAttribute.value += c;
+    return doubleQuotedAttributeValue;
   }
 }
 //Switch to the attribute value (single-quoted) state.
 function singleQuotedAttributeValue(c) {
-  if(c === "'") {
-    return afterQuetedAttributeValue
-  }else {
-    currentAttribute.value+=c
-    return singleQuotedAttributeValue
+  if (c === "'") {
+    return afterQuetedAttributeValue;
+  } else {
+    currentAttribute.value += c;
+    return singleQuotedAttributeValue;
   }
 }
 //Reconsume in the attribute value (unquoted) state.
 function unquotedAttributeValue(c) {
-  if(isSpace(c)) {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    return beforeAttributeName
-  }else if(c=== "/") {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    return selfClosingStartTag
-  } else  if(c === '>') {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    emit(currentAttribute)
-    return data
-  }else if(c==="\u0000") {}else if(c==="\"" || c==="'" || c==="<" || c==="=" || c==="`"){
-    currentAttribute.value+=c
-    return unquotedAttributeValue
-    throw new Error('unexpected-character-in-unquoted-attribute-value')
-    
-  }else if(c ===EOF) {
-    emit(EOFToken)
-  }else {
-    currentAttribute.value+=c
-    return unquotedAttributeValue
+  if (isSpace(c)) {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return beforeAttributeName;
+  } else if (c === "/") {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return selfClosingStartTag;
+  } else if (c === ">") {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    emit(currentAttribute);
+    return data;
+  } else if (c === "\u0000") {
+  } else if (c === '"' || c === "'" || c === "<" || c === "=" || c === "`") {
+    currentAttribute.value += c;
+    return unquotedAttributeValue;
+    throw new Error("unexpected-character-in-unquoted-attribute-value");
+  } else if (c === EOF) {
+    emit(EOFToken);
+  } else {
+    currentAttribute.value += c;
+    return unquotedAttributeValue;
   }
- }
+}
 function afterQuetedAttributeValue(c) {
-  if(isSpace(c)) {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    return beforeAttributeName
-  }else if(c === "/") {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    return selfClosingStartTag
-  }else if(c === ">") {
-    currentToken[currentAttribute.name] = currentAttribute.value
-    emit(currentToken)
-    return data
-  }else if(c==="EOF") {
-    emit(EOFToken)
-  }else {
-    currentToken[currentAttribute.name] = currentAttribute.value
+  if (isSpace(c)) {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return beforeAttributeName;
+  } else if (c === "/") {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return selfClosingStartTag;
+  } else if (c === ">") {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    emit(currentToken);
+    return data;
+  } else if (c === "EOF") {
+    emit(EOFToken);
+  } else {
+    currentToken[currentAttribute.name] = currentAttribute.value;
     //This is a missing-whitespace-between-attributes parse error.
-    return beforeAttributeName(c)
+    return beforeAttributeName(c);
   }
 }
 module.exports.parseHTML = function (html) {
@@ -229,4 +268,5 @@ module.exports.parseHTML = function (html) {
     state = state(c);
   }
   state = state(EOF);
+  console.log(stack[0]);
 };
