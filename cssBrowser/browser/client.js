@@ -20,4 +20,5 @@ void async function () {
     });
     const response = await requset.send();
     let dom = parse.parseHTML(response.body);
+    console.log(JSON.stringify(dom,null,"   "))
 }()
