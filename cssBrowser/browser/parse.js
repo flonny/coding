@@ -20,6 +20,7 @@
     </body>
     </html>
  */
+const layout = require("./layout.js");
 
 function isASCIIAlpha(c) {
   return c.match(/^[a-zA-Z]$/);
@@ -69,36 +70,37 @@ function computeCss(element) {
         matched = true;
       }
       if (matched) {
-        let sp  =specificity(rule.selectors[0])
+        let sp = specificity(rule.selectors[0]);
         let computedStyle = element.computedStyle;
         for (let declaration of rule.declarations) {
-          if(!computedStyle[declaration.property]) {
+          if (!computedStyle[declaration.property]) {
             computedStyle[declaration.property] = {};
           }
-          if(!computedStyle[declaration.property].specificity) {
+          if (!computedStyle[declaration.property].specificity) {
             computedStyle[declaration.property].value = declaration.value;
-            computedStyle[declaration.property].specificity = sp
-          }else if(compare( computedStyle[declaration.property].specificity , sp)<0) {
+            computedStyle[declaration.property].specificity = sp;
+          } else if (
+            compare(computedStyle[declaration.property].specificity, sp) < 0
+          ) {
             computedStyle[declaration.property].value = declaration.value;
-            computedStyle[declaration.property].specificity = sp
+            computedStyle[declaration.property].specificity = sp;
           }
-    
         }
       }
     }
   }
 }
-function compare(sp1,sp2) {
-  if(sp1[0]-sp2[0]) {
-    return sp1[0]-sp2[0]
+function compare(sp1, sp2) {
+  if (sp1[0] - sp2[0]) {
+    return sp1[0] - sp2[0];
   }
-  if(sp1[1]-sp2[1]) {
-    return sp1[1]-sp2[1]
+  if (sp1[1] - sp2[1]) {
+    return sp1[1] - sp2[1];
   }
-  if(sp1[2]-sp2[2]) {
-    return sp1[2]-sp2[2]
+  if (sp1[2] - sp2[2]) {
+    return sp1[2] - sp2[2];
   }
-  return sp1[3]-sp2[3]
+  return sp1[3] - sp2[3];
 }
 function specificity(selector) {
   let p = [0, 0, 0, 0];
@@ -166,8 +168,10 @@ function emit(token) {
       if (top.tagName === "style") {
         addCssRules(top.children[0].content);
       }
+
       stack.pop();
     }
+    layout(top);
     currentTextNode = null;
   } else if (token.type === "text") {
     if (currentTextNode === null) {
@@ -374,5 +378,6 @@ module.exports.parseHTML = function (html) {
     state = state(c);
   }
   state = state(EOF);
-  return stack
+  // console.log(JSON.stringify(stack,null," "))
+  return stack[0];
 };
