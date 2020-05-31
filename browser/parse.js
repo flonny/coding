@@ -27,6 +27,7 @@ const EOFToken = {
 };
 let currentToken = null;
 let currentAttribute = null;
+let currentTextNode = null;
 let stack = [
   {
     type: "document",
@@ -40,10 +41,7 @@ function isSpace(c) {
   return c.match(/^[\t\n\f ]$/);
 }
 function emit(token) {
-  if (token.type === "text") return;
-  let currentTextNode = null;
   let top = stack[stack.length - 1];
-  console.log(token.tagName);
   if (token.type === "startTag") {
     let element = {
       type: "element",
@@ -72,6 +70,15 @@ function emit(token) {
       stack.pop();
     }
     currentTextNode = null;
+  }else if(token.type === 'text') {
+    if(currentTextNode === null) {
+      currentTextNode = {
+        type: 'text',
+        content: ''
+      }
+      top.children.push(currentTextNode)
+    }
+    currentTextNode.content+=token.content
   }
   // if (token.type !== "text") {
   //   console.log(token);
