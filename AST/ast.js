@@ -128,4 +128,3 @@ for (let token of tokenize("1024 * 25 + 2*45")) {
 }
 Expr(source)
 console.log(source)
-console.log('end')
