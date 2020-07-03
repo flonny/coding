@@ -82,23 +82,45 @@ function variableDeclarations(): void {
     let tuple: [number, string, boolean] = [7, 'hello', true]
     let [a, b, c] = tuple
     console.log([a, b, c])
-  
-}
-debugger;
-function f() {
- 
-    var a = 1;
-
-    a = 1;
-    var b = g();
-    a = 3;
-
-    return b;
-
-    function g() {
-        console.log(a)
-        return a;
+    function f() {
+        var a = 1;
+        a = 2;
+        var b = g();
+        a = 3;
+        return b;
+        function g() {
+            return a;
+        }
     }
+
+ 
+    function f1(shouldInitialize:boolean) {
+        if(shouldInitialize) {
+            var x =10
+        }
+        return x;
+    }
+    console.log(f1(true))
+    console.log(f1(false))
+    /**
+     * 
+     * @param matrix 
+     * 错误的示例
+     */
+    function sumMatrix(matrix:number[][]):number {
+        var sum = 0;
+        for(var i =0;i<matrix.length;i++) {
+            var currentRow = matrix[i]
+            for(var i =0;i<currentRow.length;i++){
+                console.log(i)
+                sum+=currentRow[i]
+            }
+        }
+        return sum
+    }
+    console.log(sumMatrix([[1,2],[1,1]]))
+
 }
-console.log(f())
+
+
 variableDeclarations()
