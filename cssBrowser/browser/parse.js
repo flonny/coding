@@ -138,8 +138,10 @@ function match(element, selector) {
   return false;
 }
 function emit(token) {
+
   let top = stack[stack.length - 1];
   if (token.type === "startTag") {
+    console.log(token)
     let element = {
       type: "element",
       children: [],
@@ -162,6 +164,7 @@ function emit(token) {
     }
     currentTextNode = null;
   } else if (token.type === "endTag") {
+    console.log(token)
     if (top.tagName !== token.tagName) {
       throw new Error("Tag start end don't match");
     } else {
@@ -336,7 +339,7 @@ function unquotedAttributeValue(c) {
     return selfClosingStartTag;
   } else if (c === ">") {
     currentToken[currentAttribute.name] = currentAttribute.value;
-    emit(currentAttribute);
+    emit(currentToken);
     return data;
   } else if (c === "\u0000") {
   } else if (c === '"' || c === "'" || c === "<" || c === "=" || c === "`") {

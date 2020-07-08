@@ -1,7 +1,9 @@
 
 const Request = require('./Request')
 const parse = require('./parse')
-const images = require("images");
+
+const fs = require('fs')
+
 const render  = require('./render')
 class Response {
 }
@@ -21,8 +23,9 @@ void async function () {
     });
     const response = await requset.send();
     let dom = parse.parseHTML(response.body);
-    let viewport = images(800, 600);
+    let viewport = null;
+    console.log(dom)
 	render(viewport, dom);
-	viewport.save("viewport.jpg")
+	// viewport.save("viewport.jpg")
     // console.log(JSON.stringify(dom,null,"   "))
 }()
