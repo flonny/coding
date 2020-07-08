@@ -1,0 +1,20 @@
+{
+  "name": "reactive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "jest": "^26.1.0",
+    "jsdom": "^16.2.2"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.10.4"
+  }
+}
