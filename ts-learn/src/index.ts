@@ -1,3 +1,4 @@
+import './Interfaces'
 /**basic types */
 function basicTypes(): void {
     let isDone: boolean = false
@@ -123,4 +124,4 @@ function variableDeclarations(): void {
 }
 
 
-variableDeclarations()
+// variableDeclarations()
