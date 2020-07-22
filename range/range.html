@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>range</title>
+    <style>
+        .markdown {
+            width: 500px;
+            height: 500px;
+            border: 1px solid #ddd;
+            color: #666;
+            outline: none;
+            padding: 15px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="a">
+        <div>1</div>
+        <span>2</span>
+        <div>3</div>
+        <a>4</a>
+        <div>5</div>
+    </div>
+    <div contenteditable="true" id="markdown" class="markdown"></div>
+    <script>
+        let token = {
+            type: 'text',
+            content: ''
+        }
+        let newLine = true
+
+        function inputChar(e) {
+            console.log(e)
+            if (!state) {
+                state = data
+            }
+            newLine = false
+            state = state(e.data)
+
+        }
+        var state = data
+        function data(c) {
+            if (c === "#") {
+                return waitHead
+            } else {
+                return data
+            }
+
+        }
+        function waitHead(c) {
+            if (/\s/.test(c)) {
+                token = {
+                    type: 'head',
+                    string: ''
+                }
+                return Head
+            } else {
+                return data
+            }
+        }
+        function Head(c) {
+            console.log(c)
+        }
+        function handleKeyDown(e) {
+            console.log(e)
+        }
+        document.addEventListener('input', inputChar)
+        document.addEventListener('keydown', handleKeyDown)
+    </script>
+</body>
+
+</html>
