@@ -31,7 +31,9 @@
     "generate-report2": "nyc --report-dir coverage npm run test",
     "go": "npm run clean && npm run lint && npm run build && npm run test",
     "webpack": "webpack --env build",
-    "serve": "http-server"
+    "serve": "http-server",
+    "t-stack": "mocha -r ts-node/register ./test/ts/**/stack.spec.ts  --recursive",
+    "t-converter": "mocha -r ts-node/register ./test/ts/**/base-converter.spec.ts  --recursive"
   },
   "nyc": {
     "include": [
