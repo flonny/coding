@@ -1,0 +1,13 @@
+var num = 1;
+num = 3;
+var price = 1.5;
+var myName = 'Packt';
+var tureValue = true;
+var nullValue = null;
+var uud;
+console.log('num ' + num);
+console.log('myName ' + myName);
+console.log('trueValue ' + tureValue);
+console.log('price ' + price);
+console.log('nullValue ' + nullValue);
+console.log('uud ' + uud);
