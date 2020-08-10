@@ -33,6 +33,8 @@
     "webpack": "webpack --env build",
     "serve": "http-server",
     "t-stack": "mocha -r ts-node/register ./test/ts/**/stack.spec.ts  --recursive",
+    "t-queue": "mocha -r ts-node/register ./test/ts/**/queue.spec.ts  --recursive",
+    "t-deque": "mocha -r ts-node/register ./test/ts/**/deque.spec.ts  --recursive",
     "t-converter": "mocha -r ts-node/register ./test/ts/**/base-converter.spec.ts  --recursive"
   },
   "nyc": {
