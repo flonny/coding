@@ -22,16 +22,36 @@ export default class Deque<T> {
     return this.items[--this.count];
   }
   addFront(element: T) {
-    if(this.isEmpty()) {
+    if (this.isEmpty()) {
       this.addBack(element);
-    }else if(this.lowestCount>0) {
-      this.items[this.lowestCount]
+    } else if (this.lowestCount > 0) {
+      this.items[this.lowestCount--] = element;
+    } else {
+      for (let i = this.count; i > 0; i--) {
+        this.items[i] = this.items[i - 1];
+      }
+      this.count += 1;
+      this.items[0] = element;
     }
   }
   removeFront() {
     const item = this.items[this.lowestCount];
     this.lowestCount += 1;
     return item;
+  }
+  peekFront() {
+    return this.items[this.lowestCount];
+  }
+  peekBack() {
+    return this.items[this.count - 1];
+  }
+  clear() {
+    this.count = 0;
+    this.lowestCount = 0;
+    this.items = {};
+  }
+  toString() {
+    return this.isEmpty() ? '' : Object.values(this.items).join(',');
   }
 
 }
