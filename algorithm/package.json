@@ -35,6 +35,7 @@
     "t-stack": "mocha -r ts-node/register ./test/ts/**/stack.spec.ts  --recursive",
     "t-queue": "mocha -r ts-node/register ./test/ts/**/queue.spec.ts  --recursive",
     "t-deque": "mocha -r ts-node/register ./test/ts/**/deque.spec.ts  --recursive",
+    "t-linked": "mocha -r ts-node/register ./test/ts/**/linked-list.spec.ts  --recursive",
     "t-converter": "mocha -r ts-node/register ./test/ts/**/base-converter.spec.ts  --recursive",
     "t-potato": "mocha -r ts-node/register ./test/ts/**/hot-potato.spec.ts  --recursive",
     "t-palindrome": "mocha -r ts-node/register ./test/ts/**/palindrome-checker.spec.ts  --recursive"
