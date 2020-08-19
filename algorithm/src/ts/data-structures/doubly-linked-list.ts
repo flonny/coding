@@ -1,21 +1,28 @@
 import { defaultEquals, IEqualsFunction } from '../util';
-import { Node } from './models/linked-list-models';
-export default  class LinkedList<T> {
-  protected count = 0;
-  protected head: Node<T> | undefined;
-  constructor(protected equalsFn: IEqualsFunction<T> = defaultEquals) {}
+import LinkedList from './linked-list';
+import { DoublyNode } from './models/linked-list-models';
+
+export default class DoublyLinkedList<T> extends LinkedList<T> {
+  protected head: DoublyNode<T> | undefined;
+  protected tail: DoublyNode<T> | undefined;
+
+  constructor(protected equalsFn: IEqualsFunction<T> = defaultEquals) {
+    super(equalsFn);
+  }
   push(element: T) {
-    const node = new Node(element);
-    if (this.head) {
-      let current = this.head;
-      while (current.next) {
-        current = current.next;
-      }
-      current.next = node;
+    const node = new DoublyNode(element);
+    if (this.tail) {
+      node.prev = this.tail;
+      this.tail.next = node;
+      this.tail = node;
     } else {
       this.head = node;
+      this.tail = node;
     }
-    this.count += 1;
+    this.count++;
+  }
+  getTail() {
+    return this.tail;
   }
   insert(element: T, position: number) {
     if (position >= 0 && position <= this.count) {
@@ -23,17 +30,20 @@ export default  class LinkedList<T> {
         this.push(element);
       } else if (position === 0) {
         const next = this.head;
-        this.head = new Node(element);
+        this.head = new DoublyNode(element);
         this.head.next = next;
+        next.prev = this.head;
         this.count++;
       } else {
-        const node = new Node(element);
+        const node = new DoublyNode(element);
         let prev = this.head;
         for (let i = 0; i < position - 1; i++) {
           prev = prev.next;
         }
         const next = prev.next;
         prev.next = node;
+        node.prev = prev;
+        next.prev = node;
         node.next = next;
         this.count++;
       }
@@ -41,40 +51,27 @@ export default  class LinkedList<T> {
     }
     return false;
   }
-  getElementAt(index: number) {
-    if (index < 0 || index >= this.count) {
-      return undefined;
-    } else {
-      let current = this.head;
-      for (let i = 0; i < index; i++) {
-        current = current.next;
-      }
-      return current;
-    }
-  }
-  remove(element: T) {
-    const positon = this.indexOf(element);
-    if (positon !== -1) {
-      return this.removeAt(positon);
-    }
-  }
-  indexOf(element: T) {
-    let current = this.head;
-    for (let i = 0; i < this.count; i++) {
-      if (this.equalsFn(current.element, element)) {
-        return i;
-      }
-      current = current.next;
-    }
-    return -1;
-  }
   removeAt(position: number) {
     if (position < 0 || position >= this.count) {
       return undefined;
+    } else if (this.count === 1) {
+      const current = this.head;
+      this.head = undefined;
+      this.tail = undefined;
+      this.count--;
+      return current.element;
     } else if (position === 0) {
       const head = this.getElementAt(1);
       const current = this.head;
       this.head = head;
+      this.head.prev = undefined;
+      this.count--;
+      return current.element;
+    } else if (position === this.count - 1) {
+      const current = this.tail;
+      const tail = this.tail.prev;
+      tail.next = undefined;
+      this.tail = tail;
       this.count--;
       return current.element;
     } else {
@@ -85,26 +82,14 @@ export default  class LinkedList<T> {
         current = current.next;
       }
       prev.next = current.next;
+      current.next.prev = prev;
       this.count--;
       return current.element;
     }
   }
-  isEmpty() {
-    return this.count === 0;
-  }
-  getHead() {
-    return this.head;
-  }
-  size() {
-    return this.count;
-  }
-  clear() {
-    this.count = 0; // {2}
-    this.head = void 0; // {3}
-  }
-  toString() {
+  inverseToString() {
     let count = this.count;
-    let current = this.head;
+    let current = this.tail;
     let aString = '';
     while (count--) {
       if (aString) {
@@ -112,11 +97,8 @@ export default  class LinkedList<T> {
       } else {
         aString = `${current.element}`;
       }
-      current = current.next;
+      current = current.prev;
     }
     return aString;
   }
 }
-
-
-
