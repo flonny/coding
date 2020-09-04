@@ -39,7 +39,9 @@
     "t-doubly": "mocha -r ts-node/register ./test/ts/**/doubly-linked-list.spec.ts  --recursive",
     "t-converter": "mocha -r ts-node/register ./test/ts/**/base-converter.spec.ts  --recursive",
     "t-potato": "mocha -r ts-node/register ./test/ts/**/hot-potato.spec.ts  --recursive",
-    "t-palindrome": "mocha -r ts-node/register ./test/ts/**/palindrome-checker.spec.ts  --recursive"
+    "t-palindrome": "mocha -r ts-node/register ./test/ts/**/palindrome-checker.spec.ts  --recursive",
+    "t-set": "mocha -r ts-node/register ./test/ts/**/set.spec.ts  --recursive",
+    "t-dictionary": "mocha -r ts-node/register ./test/ts/**/dictionary.spec.ts  --recursive"
   },
   "nyc": {
     "include": [
