@@ -106,4 +106,7 @@ describe('BinarySearchTree', () => {
   it('removes a leaf', () => {
     expect(tree.getRoot()).to.equal(undefined);
   });
+  it('inOrderTraverse', () => {
+   
+  });
 });

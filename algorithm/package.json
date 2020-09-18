@@ -41,7 +41,8 @@
     "t-potato": "mocha -r ts-node/register ./test/ts/**/hot-potato.spec.ts  --recursive",
     "t-palindrome": "mocha -r ts-node/register ./test/ts/**/palindrome-checker.spec.ts  --recursive",
     "t-set": "mocha -r ts-node/register ./test/ts/**/set.spec.ts  --recursive",
-    "t-dictionary": "mocha -r ts-node/register ./test/ts/**/dictionary.spec.ts  --recursive"
+    "t-dictionary": "mocha -r ts-node/register ./test/ts/**/dictionary.spec.ts  --recursive",
+    "t-binary-search": "mocha -r ts-node/register ./test/ts/**/binary-search-tree.spec.ts  --recursive"
   },
   "nyc": {
     "include": [
